@@ -6,6 +6,8 @@ from requests.adapters import HTTPAdapter, Retry
 import requests
 
 from datetime import datetime as dt
+import dateutil.parser
+
 from urllib.parse import unquote
 from urllib.parse import urljoin
 from urllib.parse import urlparse
@@ -478,9 +480,10 @@ class FantiaDownloader:
         post_id = post_json["id"]
         post_creator = post_json["fanclub"]["creator_name"]
         post_title = post_json["title"]
+        post_date = dateutil.parser.parse(post_json["posted_at"]).strftime("%Y-%m-%d")
         post_contents = post_json["post_contents"]
 
-        post_directory_title = sanitize_for_path(str(post_id))
+        post_directory_title = sanitize_for_path(f"[{post_date}] {post_title}")
 
         post_directory = os.path.join(self.directory, sanitize_for_path(post_creator), post_directory_title)
         os.makedirs(post_directory, exist_ok=True)
