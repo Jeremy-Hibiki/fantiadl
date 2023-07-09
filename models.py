@@ -479,11 +479,12 @@ class FantiaDownloader:
         post_creator = post_json["fanclub"]["creator_name"]
         post_title = post_json["title"]
         post_date = dateutil.parser.parse(post_json["posted_at"]).strftime("%Y-%m-%d")
+        post_month = dateutil.parser.parse(post_json["posted_at"]).strftime("%Y-%m")
         post_contents = post_json["post_contents"]
 
         post_directory_title = sanitize_for_path(f"[{post_date}] {post_title}")
 
-        post_directory = os.path.join(self.directory, sanitize_for_path(post_creator), post_directory_title)
+        post_directory = os.path.join(self.directory, sanitize_for_path(post_creator), post_month, post_directory_title)
         os.makedirs(post_directory, exist_ok=True)
 
         post_titles = self.collect_post_titles(post_json)
