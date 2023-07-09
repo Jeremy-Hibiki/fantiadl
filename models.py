@@ -1,16 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from bs4 import BeautifulSoup
-from requests.adapters import HTTPAdapter, Retry
-import requests
-
-from datetime import datetime as dt
-import dateutil.parser
-
-from urllib.parse import unquote
-from urllib.parse import urljoin
-from urllib.parse import urlparse
 import http.cookiejar
 import json
 import math
@@ -20,7 +10,13 @@ import re
 import sys
 import time
 import traceback
+from datetime import datetime as dt
+from urllib.parse import unquote, urljoin, urlparse
 
+import dateutil.parser
+import requests
+from bs4 import BeautifulSoup
+from requests.adapters import HTTPAdapter, Retry
 
 import fantiadl
 
@@ -551,11 +547,13 @@ def guess_extension(mimetype, download_url):
             extension = ".unknown"
     return extension
 
+
 def sanitize_for_path(value, replace=' '):
     """Remove potentially illegal characters from a path."""
     sanitized = re.sub(r'[<>\"\?\\\/\*:|]', replace, value)
     sanitized = sanitized.translate(UNICODE_CONTROL_MAP)
     return re.sub(r'[\s.]+$', '', sanitized)
+
 
 def build_crawljob(links, root_directory, post_directory):
     """Append to a root .crawljob file with external links gathered from a post."""

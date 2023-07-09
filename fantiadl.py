@@ -3,8 +3,6 @@
 """Download media and other data from Fantia"""
 
 import argparse
-import getpass
-import netrc
 import sys
 import traceback
 
@@ -111,25 +109,25 @@ if __name__ == "__main__":
                     raise
         if cmdl_opts.url:
             for url in cmdl_opts.url:
-                    url_match = models.FANTIA_URL_RE.match(url)
-                    if url_match:
-                        try:
-                            url_groups = url_match.groups()
-                            if url_groups[0] == "fanclubs":
-                                fanclub = models.FantiaClub(url_groups[1])
-                                downloader.download_fanclub(fanclub, cmdl_opts.limit)
-                            elif url_groups[0] == "posts":
-                                downloader.download_post(url_groups[1])
-                        except KeyboardInterrupt:
+                url_match = models.FANTIA_URL_RE.match(url)
+                if url_match:
+                    try:
+                        url_groups = url_match.groups()
+                        if url_groups[0] == "fanclubs":
+                            fanclub = models.FantiaClub(url_groups[1])
+                            downloader.download_fanclub(fanclub, cmdl_opts.limit)
+                        elif url_groups[0] == "posts":
+                            downloader.download_post(url_groups[1])
+                    except KeyboardInterrupt:
+                        raise
+                    except:
+                        if cmdl_opts.continue_on_error:
+                            downloader.output("Encountered an error downloading URL. Skipping...\n")
+                            traceback.print_exc()
+                            continue
+                        else:
                             raise
-                        except:
-                            if cmdl_opts.continue_on_error:
-                                downloader.output("Encountered an error downloading URL. Skipping...\n")
-                                traceback.print_exc()
-                                continue
-                            else:
-                                raise
-                    else:
-                        sys.stderr.write("Error: {} is not a valid URL. Please provide a fully qualified Fantia URL (https://fantia.jp/posts/[id], https://fantia.jp/fanclubs/[id])\n".format(url))
+                else:
+                    sys.stderr.write("Error: {} is not a valid URL. Please provide a fully qualified Fantia URL (https://fantia.jp/posts/[id], https://fantia.jp/fanclubs/[id])\n".format(url))
     except KeyboardInterrupt:
         sys.exit("Interrupted by user. Exiting...")
