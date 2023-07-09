@@ -57,6 +57,7 @@ MIMETYPES = {
 
 UNICODE_CONTROL_MAP = dict.fromkeys(range(32))
 
+DEFAULT_OUTPUT_DIR = "output"
 
 class FantiaClub:
     def __init__(self, fanclub_id):
@@ -72,7 +73,7 @@ class FantiaDownloader:
         self.dump_metadata = dump_metadata
         self.parse_for_external_links = parse_for_external_links
         self.download_thumb = download_thumb
-        self.directory = directory or ""
+        self.directory = directory or DEFAULT_OUTPUT_DIR
         self.quiet = quiet
         self.continue_on_error = continue_on_error
         self.use_server_filenames = use_server_filenames
